@@ -1,0 +1,13 @@
+@nilmod {
+	name: "BedcraftFixes";
+	description: "More 1.4 fixes specifically for the Bedcraft server. Things that don't make sense in UpsilonFixes go here.";
+	authors: "ThePixelbrain";
+	version: "${version}";
+}
+
+entrypoints {
+	premain: "uk.bedcraft.bedcraftfixes.BedcraftFixesPremain";
+	hijack: "uk.bedcraft.bedcraftfixes.BedcraftFixesPremain";
+	forge-earlyinit: "uk.bedcraft.bedcraftfixes.BedcraftFixesForgeEarlyInit";
+	forge-postinit: "uk.bedcraft.bedcraftfixes.BedcraftFixesForgePostInit";
+}

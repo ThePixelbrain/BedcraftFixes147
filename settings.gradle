@@ -1,0 +1,11 @@
+pluginManagement {
+	repositories {
+		maven {
+			url 'https://repo.sleeping.town'
+			content {
+				includeGroup 'com.unascribed.nilgradle'
+			}
+		}
+		mavenLocal()
+	}
+}
