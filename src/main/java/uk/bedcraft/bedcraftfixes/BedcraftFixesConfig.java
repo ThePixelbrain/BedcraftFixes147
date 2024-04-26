@@ -18,6 +18,9 @@ import nilloader.api.lib.qdcss.BadValueException;
 import nilloader.api.lib.qdcss.QDCSS;
 
 public class BedcraftFixesConfig {
+	@Key("mcpc-java-8")
+	@Comment("Allow MCPC to run on Java 8")
+	public static boolean mcpcJava8 = true;
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
