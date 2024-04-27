@@ -22,6 +22,11 @@ public class BedcraftFixesConfig {
 	@Comment("Allow MCPC to run on Java 8")
 	public static boolean mcpcJava8 = true;
 
+	@Key("tickthreading-no-deadlock-recovery")
+	@Comment("TT's deadlock recovery is broken on Java 8.\n" +
+			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
+	public static boolean ttNoDeadlockRecovery = true;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
