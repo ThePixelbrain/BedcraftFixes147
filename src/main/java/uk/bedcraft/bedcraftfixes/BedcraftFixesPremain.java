@@ -23,6 +23,13 @@ public class BedcraftFixesPremain implements Runnable {
 
 	@Override
 	public void run() {
+		boolean bukkitServer = false;
+
+		try {
+			Class.forName("org.bukkit.Bukkit");
+			bukkitServer = true;
+		} catch (ClassNotFoundException ignored) {}
+
 		try (ZipFile zip = new ZipFile(NilModList.getById("bedcraftfixes").get().source)) {
 			for (ZipEntry en : asIterable(zip::entries)) {
 				String name = en.getName();
@@ -30,7 +37,28 @@ public class BedcraftFixesPremain implements Runnable {
 					name = name.substring(0, name.length()-6).replace('/', '.');
 					Class<?> clazz = Class.forName(name);
 					if (ClassTransformer.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers())) {
-						boolean enabled = isEnabled(clazz, name);
+						ConfigOptions options = clazz.getAnnotation(ConfigOptions.class);
+						boolean enabled = true;
+						if (options != null) {
+							enabled = false;
+							for (String o : options.value()) {
+								Field f = BedcraftFixesConfig.class.getField(o);
+								boolean v;
+								// Enable Transformer if server is a Bukkit server and Transformer is in package uk.bedcraft.bedcraftfixes.bukkitevents
+								if (f.getType() == BedcraftFixesConfig.Trilean.class) {
+									v = ((BedcraftFixesConfig.Trilean)f.get(null)).resolve(bukkitServer && clazz.getPackage().getName().contains("uk.bedcraft.bedcraftfixes.bukkitevents"));
+								} else if (f.getType() == boolean.class || f.getType() == Boolean.class) {
+									v = (Boolean)f.get(null);
+								} else {
+									throw new ClassCastException(f.getType()+" is not boolean-convertible while looking up option "+o+" for "+ name);
+								}
+								if (v) {
+									enabled = true;
+									break;
+								}
+							}
+						}
+
 						if (enabled) {
 							ClassTransformer ct = (ClassTransformer)clazz.newInstance();
 							if (ct instanceof MiniTransformer) {
@@ -44,28 +72,6 @@ public class BedcraftFixesPremain implements Runnable {
 		} catch (Exception e) {
 			log.error("Failed to discover transformers", e);
 		}
-	}
-
-	private static boolean isEnabled(Class<?> clazz, String name) throws NoSuchFieldException, IllegalAccessException {
-		ConfigOptions options = clazz.getAnnotation(ConfigOptions.class);
-		boolean enabled = true;
-		if (options != null) {
-			enabled = false;
-			for (String o : options.value()) {
-				Field f = BedcraftFixesConfig.class.getField(o);
-				boolean v;
-				if (f.getType() == boolean.class || f.getType() == Boolean.class) {
-					v = (Boolean)f.get(null);
-				} else {
-					throw new ClassCastException(f.getType()+" is not boolean-convertible while looking up option "+o+" for "+ name);
-				}
-				if (v) {
-					enabled = true;
-					break;
-				}
-			}
-		}
-		return enabled;
 	}
 
 	private static <T> Iterable<T> asIterable(Supplier<Enumeration<T>> sup) {

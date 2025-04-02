@@ -27,6 +27,11 @@ public class BedcraftFixesConfig {
 			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
 	public static boolean ttNoDeadlockRecovery = true;
 
+	@Key("bukkit-event-build-gravigun")
+	@Comment("Send a bukkit event when a GraviGun interacts with blocks.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventBuildGraviGun = Trilean.AUTO;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
