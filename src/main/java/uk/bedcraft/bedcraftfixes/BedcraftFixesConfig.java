@@ -47,6 +47,11 @@ public class BedcraftFixesConfig {
 			"Will only activate on Bukkit Servers if set to AUTO.")
 	public static Trilean bukkitEventPortalGun = Trilean.AUTO;
 
+	@Key("bukkit-event-buildcraft")
+	@Comment("Send a bukkit event when a Buildcraft Filler interacts with blocks.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventBuildcraft = Trilean.AUTO;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
