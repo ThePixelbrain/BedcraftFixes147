@@ -1,4 +1,4 @@
-package uk.bedcraft.bedcraftfixes.bukkitevents.gravigun;
+package uk.bedcraft.bedcraftfixes.bukkitevents.portalgun;
 
 import net.minecraft.entity.Entity;
 import nilloader.api.lib.asm.tree.LabelNode;
@@ -8,8 +8,8 @@ import uk.bedcraft.bedcraftfixes.BedcraftMiniTransformer;
 import uk.bedcraft.bedcraftfixes.ConfigOptions;
 import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 
-@Patch.Class("gravigun.common.entity.EntityBlock")
-@ConfigOptions("bukkitEventGraviGun")
+@Patch.Class("portalgun.common.entity.EntityBlock")
+@ConfigOptions("bukkitEventPortalGun")
 public class EntityBlockTransformer extends BedcraftMiniTransformer {
     @Patch.Method("j_()V")
     public void patchJ_(PatchContext ctx) {
@@ -17,13 +17,13 @@ public class EntityBlockTransformer extends BedcraftMiniTransformer {
         ctx.jumpToStart();
         ctx.search(
                 ALOAD(0),
-                GETFIELD("gravigun/common/entity/EntityBlock", "p", "Lnet/minecraft/world/World;"),
-                GETFIELD("net/minecraft/world/World", "isRemote", "Z")
-        ).jumpAfter();
-        ctx.search(
-                ALOAD(0),
-                INVOKEVIRTUAL("gravigun/common/entity/EntityBlock", "x", "()V")
-        ).jumpAfter();
+                GETFIELD("portalgun/common/entity/EntityBlock", "p", "Lnet/minecraft/world/World;"),
+                ILOAD(1),
+                ILOAD(2),
+                ILOAD(3),
+                INVOKEVIRTUAL("net/minecraft/world/World", "getBlockId", "(III)I"),
+                ISTORE(4)
+        ).jumpBefore();
         ctx.add(
                 ILOAD(1),
                 ILOAD(2),
@@ -31,6 +31,8 @@ public class EntityBlockTransformer extends BedcraftMiniTransformer {
                 ALOAD(0),
                 INVOKESTATIC(hooks(), "createEvent", "(IIILnet/minecraft/entity/Entity;)Z"),
                 IFNE(Lcontinue),
+                ALOAD(0),
+                INVOKEVIRTUAL("portalgun/common/entity/EntityBlock", "x", "()V"),
                 RETURN(),
                 Lcontinue
         );
@@ -38,7 +40,7 @@ public class EntityBlockTransformer extends BedcraftMiniTransformer {
 
     public static class Hooks {
         public static boolean createEvent(int x, int y, int z, Entity entity) {
-            return BukkitInterop.blockPlaceEvent(x, y, z, "GravityGun", entity.worldObj.worldInfo.getWorldName());
+            return BukkitInterop.blockPlaceEvent(x, y, z, "PortalGun", entity.worldObj.worldInfo.getWorldName());
         }
     }
 }

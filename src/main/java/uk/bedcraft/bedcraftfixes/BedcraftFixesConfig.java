@@ -27,10 +27,25 @@ public class BedcraftFixesConfig {
 			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
 	public static boolean ttNoDeadlockRecovery = true;
 
-	@Key("bukkit-event-build-gravigun")
+	@Key("bukkit-event-gravigun")
 	@Comment("Send a bukkit event when a GraviGun interacts with blocks.\n" +
 			"Will only activate on Bukkit Servers if set to AUTO.")
-	public static Trilean bukkitEventBuildGraviGun = Trilean.AUTO;
+	public static Trilean bukkitEventGraviGun = Trilean.AUTO;
+
+	@Key("bukkit-event-ic2-explosion")
+	@Comment("Send a bukkit event when an IC2 explosion breaks blocks.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventIC2Explosion = Trilean.AUTO;
+
+	@Key("bukkit-event-ic2-mining-laser")
+	@Comment("Send a bukkit event when an IC2 mining laser breaks blocks.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventIC2MiningLaser = Trilean.AUTO;
+
+	@Key("bukkit-event-portalgun")
+	@Comment("Send a bukkit event when a PortalGun interacts with blocks.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventPortalGun = Trilean.AUTO;
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
