@@ -52,6 +52,17 @@ public class BedcraftFixesConfig {
 			"Will only activate on Bukkit Servers if set to AUTO.")
 	public static Trilean bukkitEventBuildcraft = Trilean.AUTO;
 
+	@Key("bukkit-event-computercraft")
+	@Comment("Send a bukkit event when a ComputerCraft Turtle interacts with blocks.\n" +
+			"A fake player will be created for every turtle with the name [ComputerCraft<ID>].\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventComputerCraft = Trilean.AUTO;
+
+	@Key("bukkit-event-redpower")
+	@Comment("Send a bukkit event when a RedPower Frame moves.\n" +
+			"Will only activate on Bukkit Servers if set to AUTO.")
+	public static Trilean bukkitEventRedPower = Trilean.AUTO;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {

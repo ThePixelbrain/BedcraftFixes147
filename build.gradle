@@ -53,6 +53,8 @@ dependencies {
 	game 'libs:mcpc-plus-legacy-1.4.7-R1.1-SNAPSHOT-f534-L70'
 	mod 'net.minecraftforge:forge:1.4.7-6.6.2.534:universal@zip'
 	mod 'libs:IC2'
+	mod 'libs:ComputerCraft'
+	mod 'libs:RedPowerCore'
 }
 
 mappings {
