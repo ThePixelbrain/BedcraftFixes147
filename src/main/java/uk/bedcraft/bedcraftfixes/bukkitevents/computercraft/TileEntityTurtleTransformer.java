@@ -83,7 +83,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
         public static boolean createPlaceEvent(int x, int y, int z, TileEntityTurtle turtle) {
             return BukkitInterop.blockPlaceEvent(
                     x, y, z,
-                    String.format("ComputerCraft%d", turtle.getComputerID()),
+                    String.format("Computercraft%d", turtle.getComputerID()),
                     turtle.worldObj.worldInfo.getWorldName()
             );
         }
@@ -93,7 +93,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
                     turtle.xCoord + Facing.offsetsXForSide[dir],
                     turtle.yCoord + Facing.offsetsYForSide[dir],
                     turtle.zCoord + Facing.offsetsZForSide[dir],
-                    String.format("ComputerCraft%d", turtle.getComputerID()),
+                    String.format("Computercraft%d", turtle.getComputerID()),
                     turtle.worldObj.worldInfo.getWorldName()
             );
         }
@@ -103,7 +103,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
                     turtle.xCoord + Facing.offsetsXForSide[dir],
                     turtle.yCoord + Facing.offsetsYForSide[dir],
                     turtle.zCoord + Facing.offsetsZForSide[dir],
-                    String.format("ComputerCraft%d", turtle.getComputerID()),
+                    String.format("Computercraft%d", turtle.getComputerID()),
                     turtle.worldObj.worldInfo.getWorldName()
             );
         }
