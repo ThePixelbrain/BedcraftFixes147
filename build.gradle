@@ -47,7 +47,7 @@ nil {
 }
 
 dependencies {
-	loader 'com.unascribed:nilloader:1.3.1'
+	loader 'com.unascribed:nilloader:1.3.5'
 
 	// Contact ThePixelbrain on discord in case you are unable to acquire certain libraries
 	game 'libs:mcpc-plus-legacy-1.4.7-R1.1-SNAPSHOT-f534-L70'
@@ -55,6 +55,7 @@ dependencies {
 	mod 'libs:IC2'
 	mod 'libs:ComputerCraft'
 	mod 'libs:RedPowerCore'
+	mod 'libs:RedPowerMechanical'
 }
 
 mappings {
