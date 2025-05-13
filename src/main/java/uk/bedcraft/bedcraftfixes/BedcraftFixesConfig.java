@@ -27,6 +27,11 @@ public class BedcraftFixesConfig {
 			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
 	public static boolean ttNoDeadlockRecovery = true;
 
+	@Key("fix-tt-ChunkProvider-assumptions")
+	@Comment("Fixes ClassCastException for special ChunkProviders\n" +
+			"This fixes the anvil and shield peripheral from MiscPeripherals")
+	public static boolean fixTTChunkProviderAssumptions = true;
+
 	@Key("bukkit-event-gravigun")
 	@Comment("Send a bukkit event when a GraviGun interacts with blocks.\n" +
 			"Will only activate on Bukkit Servers if set to AUTO.")
