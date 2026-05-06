@@ -52,11 +52,6 @@ public class BedcraftFixesConfig {
 			"Will only activate on Bukkit Servers if set to AUTO.")
 	public static Trilean bukkitEventPortalGun = Trilean.AUTO;
 
-	@Key("bukkit-event-buildcraft")
-	@Comment("Send a bukkit event when a Buildcraft Filler interacts with blocks.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
-	public static Trilean bukkitEventBuildcraft = Trilean.AUTO;
-
 	@Key("bukkit-event-computercraft")
 	@Comment("Send a bukkit event when a ComputerCraft Turtle interacts with blocks.\n" +
 			"A fake player will be created for every turtle with the name [ComputerCraft<ID>].\n" +
