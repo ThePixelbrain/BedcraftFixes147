@@ -25,42 +25,44 @@ public class BedcraftFixesConfig {
 	@Key("tickthreading-no-deadlock-recovery")
 	@Comment("TT's deadlock recovery is broken on Java 8.\n" +
 			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
-	public static boolean ttNoDeadlockRecovery = true;
+	@Default(AutoReference.TICKTHREADING)
+	public static Trilean ttNoDeadlockRecovery = Trilean.AUTO;
 
 	@Key("fix-tt-ChunkProvider-assumptions")
 	@Comment("Fixes ClassCastException for special ChunkProviders\n" +
 			"This fixes the anvil and shield peripheral from MiscPeripherals")
-	public static boolean fixTTChunkProviderAssumptions = true;
+	@Default(AutoReference.TICKTHREADING)
+	public static Trilean fixTTChunkProviderAssumptions = Trilean.AUTO;
 
 	@Key("bukkit-event-gravigun")
-	@Comment("Send a bukkit event when a GraviGun interacts with blocks.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+	@Comment("Send a bukkit event when a GraviGun interacts with blocks.")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventGraviGun = Trilean.AUTO;
 
 	@Key("bukkit-event-ic2-explosion")
-	@Comment("Send a bukkit event when an IC2 explosion breaks blocks.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+	@Comment("Send a bukkit event when an IC2 explosion breaks blocks.")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventIC2Explosion = Trilean.AUTO;
 
 	@Key("bukkit-event-ic2-mining-laser")
-	@Comment("Send a bukkit event when an IC2 mining laser breaks blocks.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+	@Comment("Send a bukkit event when an IC2 mining laser breaks blocks.")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventIC2MiningLaser = Trilean.AUTO;
 
 	@Key("bukkit-event-portalgun")
-	@Comment("Send a bukkit event when a PortalGun interacts with blocks.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+	@Comment("Send a bukkit event when a PortalGun interacts with blocks.")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventPortalGun = Trilean.AUTO;
 
 	@Key("bukkit-event-computercraft")
 	@Comment("Send a bukkit event when a ComputerCraft Turtle interacts with blocks.\n" +
-			"A fake player will be created for every turtle with the name [ComputerCraft<ID>].\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+			"A fake player will be created for every turtle with the name [Computercraft<ID>].")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventComputerCraft = Trilean.AUTO;
 
 	@Key("bukkit-event-redpower")
-	@Comment("Send a bukkit event when a RedPower Frame moves.\n" +
-			"Will only activate on Bukkit Servers if set to AUTO.")
+	@Comment("Send a bukkit event when a RedPower Frame moves.")
+	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventRedPower = Trilean.AUTO;
 
 	@Retention(RetentionPolicy.RUNTIME)
@@ -74,6 +76,12 @@ public class BedcraftFixesConfig {
 	private @interface Key {
 		String value();
 	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Default {
+		AutoReference value();
+	}
 	
 	public enum Trilean {
 		AUTO,
@@ -84,6 +92,17 @@ public class BedcraftFixesConfig {
 		public boolean resolve(boolean def) {
 			if (this == AUTO) return def;
 			return this == ON;
+		}
+	}
+
+	public enum AutoReference {
+		BUKKIT("Will only activate on Bukkit servers if set to AUTO."),
+		TICKTHREADING("Will only activate with TickThreading installed if set to AUTO.");
+
+		public final String comment;
+
+		AutoReference(String comment) {
+			this.comment = comment;
 		}
 	}
 
@@ -157,7 +176,13 @@ public class BedcraftFixesConfig {
 						continue;
 					}
 					Comment comment = f.getAnnotation(Comment.class);
-					if (comment != null) out.append("\t/*\r\n\t * "+comment.value().replace("\n", "\r\n\t * ")+"\r\n\t */\r\n");
+					Default defavlt = f.getAnnotation(Default.class);
+					if (comment != null || defavlt != null) {
+						out.append("\t/*");
+						if (comment != null) out.append("\r\n\t * " + comment.value().replace("\n", "\r\n\t * "));
+						if (defavlt != null) out.append("\r\n\t * " + defavlt.value().comment.replace("\n", "\r\n\t * "));
+						out.append("\r\n\t */\r\n");
+					}
 					out.append("\t"+k+": "+valueStr+";\r\n\r\n");
 				}
 			} catch (IllegalAccessException e) {
