@@ -22,6 +22,11 @@ public class BedcraftFixesConfig {
 	@Comment("Allow MCPC to run on Java 8")
 	public static boolean mcpcJava8 = true;
 
+	@Key("prevent-frame-chunkloader-move")
+	@Comment("Prevents the move of Chunk Loaders and World Anchors with RedPower frames.\n" +
+			"Bedcraft limits the amount of chunk loaders you can place and moving them with frames could abuse this.")
+	public static boolean preventFrameChunkLoaderMove = true;
+
 	@Key("tickthreading-no-deadlock-recovery")
 	@Comment("TT's deadlock recovery is broken on Java 8.\n" +
 			"Due to an oversight, the automatic restart on deadlock is broken without this patch.")
