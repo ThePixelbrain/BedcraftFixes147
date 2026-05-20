@@ -70,6 +70,12 @@ public class BedcraftFixesConfig {
 	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventRedPower = Trilean.AUTO;
 
+	@Key("mps-flight-ground-fix")
+	@Comment("Disables MPS Flight Control thrust while the player is on the ground.\n" +
+			"Eliminates the floaty/sliding feel without removing the helmet module —\n" +
+			"Flight Control resumes normally as soon as the player leaves the ground.")
+	public static boolean mpsFlightGroundFix = true;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
