@@ -75,6 +75,11 @@ public class BedcraftFixesConfig {
 			"Explosions will be disabled. The implementation was originally created by UXELDUXEL.")
 	public static boolean ic2UxelEnergyNet = true;
 
+	@Key("ic2-massfab-iv-input")
+	@Comment("Allows input of 8192 EU/t (IV) per packet for the IC2 Mass Fabricator.\n" +
+			"By default it will only accept 512 EU/t per packet (HV)")
+	public static boolean ic2MassFabIVInput = true;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
