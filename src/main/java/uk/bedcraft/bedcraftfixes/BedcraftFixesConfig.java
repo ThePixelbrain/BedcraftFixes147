@@ -70,6 +70,11 @@ public class BedcraftFixesConfig {
 	@Default(AutoReference.BUKKIT)
 	public static Trilean bukkitEventRedPower = Trilean.AUTO;
 
+	@Key("ic2-uxel-energy-net")
+	@Comment("A faster IC2 Energy Net implementation that is able to handle larger nets better and more performant\n" +
+			"Explosions will be disabled. The implementation was originally created by UXELDUXEL.")
+	public static boolean ic2UxelEnergyNet = true;
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
 	private @interface Comment {
