@@ -39,6 +39,13 @@ public class BedcraftFixesConfig {
 	@Default(AutoReference.TICKTHREADING)
 	public static Trilean fixTTChunkProviderAssumptions = Trilean.AUTO;
 
+	@Key("fix-tt-redpower-deployer")
+	@Comment("Fixes a race condition in the RedPower Deployer under TickThreading.\n" +
+			"Multiple Deployers activated simultaneously share a static fake player instance,\n" +
+			"causing their inventories to corrupt each other.")
+	@Default(AutoReference.TICKTHREADING)
+	public static Trilean fixTTRedPowerDeployer = Trilean.AUTO;
+
 	@Key("bukkit-event-gravigun")
 	@Comment("Send a bukkit event when a GraviGun interacts with blocks.")
 	@Default(AutoReference.BUKKIT)
