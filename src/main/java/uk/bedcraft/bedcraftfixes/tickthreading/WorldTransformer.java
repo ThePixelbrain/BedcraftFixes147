@@ -28,6 +28,7 @@ public class WorldTransformer extends BedcraftMiniTransformer {
     }
 
     @Patch.Method("getTEWithoutLoad(III)Lnet/minecraft/tileentity/TileEntity;")
+    @Patch.Method.AffectsControlFlow
     public void patchGetTEWithoutLoad(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
 

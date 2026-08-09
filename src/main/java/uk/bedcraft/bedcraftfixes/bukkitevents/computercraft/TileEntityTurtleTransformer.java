@@ -13,6 +13,7 @@ import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 @ConfigOptions("bukkitEventComputerCraft")
 public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
     @Patch.Method("move(I)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchMove(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();
@@ -35,6 +36,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
     }
 
     @Patch.Method("useTool(Ldan200/turtle/api/TurtleVerb;I)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchUseTool(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();
@@ -50,6 +52,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
     }
 
     @Patch.Method("place(I[Ljava/lang/Object;)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchPlace(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();
@@ -65,6 +68,7 @@ public class TileEntityTurtleTransformer extends BedcraftMiniTransformer {
     }
 
     @Patch.Method("useStack(Lnet/minecraft/item/ItemStack;IZ[Ljava/lang/Object;F)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchUseStack(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();

@@ -12,6 +12,7 @@ import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 @ConfigOptions("bukkitEventPortalGun")
 public class EntityPortalBallTransformer extends BedcraftMiniTransformer {
     @Patch.Method("spawnBlock(IIIII)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchSpawnBlock(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();

@@ -12,6 +12,7 @@ import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 @ConfigOptions("bukkitEventIC2MiningLaser")
 public class EntityMiningLaserTransformer extends BedcraftMiniTransformer {
     @Patch.Method("j_()V")
+    @Patch.Method.AffectsControlFlow
     public void patchJ_(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();

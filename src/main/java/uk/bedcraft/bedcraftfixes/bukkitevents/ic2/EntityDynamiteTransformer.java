@@ -12,6 +12,7 @@ import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 @ConfigOptions("bukkitEventIC2Explosion")
 public class EntityDynamiteTransformer extends BedcraftMiniTransformer {
     @Patch.Method("explode()V")
+    @Patch.Method.AffectsControlFlow
     public void patchExplode(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();

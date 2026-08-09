@@ -12,6 +12,7 @@ import uk.bedcraft.bedcraftfixes.ConfigOptions;
 @ConfigOptions("preventFrameChunkLoaderMove")
 public class FrameLibFrameSolverTransformer extends BedcraftMiniTransformer {
     @Patch.Method("step()Z")
+    @Patch.Method.AffectsControlFlow
     public void patchStep(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();

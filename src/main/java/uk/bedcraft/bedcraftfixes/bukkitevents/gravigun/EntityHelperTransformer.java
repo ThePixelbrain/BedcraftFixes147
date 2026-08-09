@@ -13,6 +13,7 @@ import uk.bedcraft.bedcraftfixes.bukkitevents.BukkitInterop;
 @ConfigOptions("bukkitEventGraviGun")
 public class EntityHelperTransformer extends BedcraftMiniTransformer {
     @Patch.Method("canGrab(Lnet/minecraft/entity/Entity;)Z")
+    @Patch.Method.AffectsControlFlow
     public void patchCanGrab(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();
@@ -27,6 +28,7 @@ public class EntityHelperTransformer extends BedcraftMiniTransformer {
     }
 
     @Patch.Method("tryGrab(Lnet/minecraft/entity/EntityLiving;Z)V")
+    @Patch.Method.AffectsControlFlow
     public void patchTryGrab(PatchContext ctx) {
         LabelNode Lcontinue = new LabelNode();
         ctx.jumpToStart();
