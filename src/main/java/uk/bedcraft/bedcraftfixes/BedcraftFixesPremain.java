@@ -1,15 +1,21 @@
 package uk.bedcraft.bedcraftfixes;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.AutoReference;
 import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.Trilean;
 import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.Default;
 
@@ -24,30 +30,37 @@ public class BedcraftFixesPremain implements Runnable {
 
 	public static final List<String> transformerTargets = new ArrayList<>();
 
-	public boolean bukkitServer;
+	private final Map<AutoReference, Boolean> autoPresent = new EnumMap<>(AutoReference.class);
 
-	public boolean tickThreading;
-
-	private boolean isBukkitServer() {
-		try {
-			Class.forName("org.bukkit.Bukkit");
-			return true;
-		} catch (ClassNotFoundException ignored) {}
-		return false;
+	private static boolean isPresent(String classResource) {
+		// Mods aren't on the classpath yet at premain, so look inside the jars FML will load later.
+		return ClassLoader.getSystemResource(classResource) != null
+				|| anyJarContains(new File("mods"), classResource)
+				|| anyJarContains(new File("coremods"), classResource);
 	}
 
-	private boolean hasTickThreading() {
-		try {
-			Class.forName("nallar.tickthreading.minecraft.TickThreading");
-			return true;
-		} catch (ClassNotFoundException ignored) {}
+	private static boolean anyJarContains(File dir, String entry) {
+		File[] files = dir.listFiles();
+		if (files == null) return false;
+		for (File f : files) {
+			if (!f.isFile()) continue;
+			String name = f.getName().toLowerCase(Locale.ROOT);
+			if (!name.endsWith(".jar") && !name.endsWith(".zip")) continue;
+			try (ZipFile zip = new ZipFile(f)) {
+				if (zip.getEntry(entry) != null) {
+					log.debug("Found {} in {}", entry, f.getName());
+					return true;
+				}
+			} catch (IOException ignored) {}
+		}
 		return false;
 	}
 
 	@Override
 	public void run() {
-		bukkitServer = isBukkitServer();
-		tickThreading = hasTickThreading();
+		for (AutoReference ref : AutoReference.values()) {
+			autoPresent.put(ref, isPresent(ref.classResource));
+		}
 
 		try (ZipFile zip = new ZipFile(NilModList.getById("bedcraftfixes").get().source)) {
 			for (ZipEntry en : asIterable(zip::entries)) {
@@ -83,16 +96,7 @@ public class BedcraftFixesPremain implements Runnable {
 				boolean v;
 				if (f.getType() == Trilean.class) {
 					Default defAnn = f.getAnnotation(Default.class);
-					boolean def = false;
-					switch (defAnn.value()) {
-						case BUKKIT:
-							def = bukkitServer;
-							break;
-						case TICKTHREADING:
-							def = tickThreading;
-							break;
-					}
-					v = ((Trilean)f.get(null)).resolve(def);
+					v = ((Trilean)f.get(null)).resolve(autoPresent.get(defAnn.value()));
 				} else if (f.getType() == boolean.class || f.getType() == Boolean.class) {
 					v = (Boolean)f.get(null);
 				} else {
