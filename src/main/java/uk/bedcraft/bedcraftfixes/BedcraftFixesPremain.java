@@ -5,14 +5,17 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.AutoReference;
 import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.Trilean;
 import uk.bedcraft.bedcraftfixes.BedcraftFixesConfig.Default;
 
@@ -27,36 +30,13 @@ public class BedcraftFixesPremain implements Runnable {
 
 	public static final List<String> transformerTargets = new ArrayList<>();
 
-	private static final String TT_CLASS_RESOURCE = "nallar/tickthreading/minecraft/TickThreading.class";
+	private final Map<AutoReference, Boolean> autoPresent = new EnumMap<>(AutoReference.class);
 
-	public boolean bukkitServer;
-
-	public boolean tickThreading;
-
-	private boolean isBukkitServer() {
-		try {
-			Class.forName("org.bukkit.Bukkit");
-			return true;
-		} catch (ClassNotFoundException ignored) {}
-		return false;
-	}
-
-	private boolean hasTickThreading() {
-		// TickThreading is a coremod: FML only puts its jar on the classpath when it loads mods,
-		// which happens long after this entrypoint runs, so Class.forName can't find it here.
-		if (canSeeResource(TT_CLASS_RESOURCE)) return true;
-		return anyJarContains(new File("mods"), TT_CLASS_RESOURCE);
-	}
-
-	private static boolean canSeeResource(String resource) {
-		for (ClassLoader cl : new ClassLoader[] {
-				Thread.currentThread().getContextClassLoader(),
-				BedcraftFixesPremain.class.getClassLoader()}) {
-			for (ClassLoader c = cl; c != null; c = c.getParent()) {
-				if (c.getResource(resource) != null) return true;
-			}
-		}
-		return ClassLoader.getSystemResource(resource) != null;
+	private static boolean isPresent(String classResource) {
+		// Mods aren't on the classpath yet at premain, so look inside the jars FML will load later.
+		return ClassLoader.getSystemResource(classResource) != null
+				|| anyJarContains(new File("mods"), classResource)
+				|| anyJarContains(new File("coremods"), classResource);
 	}
 
 	private static boolean anyJarContains(File dir, String entry) {
@@ -78,8 +58,9 @@ public class BedcraftFixesPremain implements Runnable {
 
 	@Override
 	public void run() {
-		bukkitServer = isBukkitServer();
-		tickThreading = hasTickThreading();
+		for (AutoReference ref : AutoReference.values()) {
+			autoPresent.put(ref, isPresent(ref.classResource));
+		}
 
 		try (ZipFile zip = new ZipFile(NilModList.getById("bedcraftfixes").get().source)) {
 			for (ZipEntry en : asIterable(zip::entries)) {
@@ -115,16 +96,7 @@ public class BedcraftFixesPremain implements Runnable {
 				boolean v;
 				if (f.getType() == Trilean.class) {
 					Default defAnn = f.getAnnotation(Default.class);
-					boolean def = false;
-					switch (defAnn.value()) {
-						case BUKKIT:
-							def = bukkitServer;
-							break;
-						case TICKTHREADING:
-							def = tickThreading;
-							break;
-					}
-					v = ((Trilean)f.get(null)).resolve(def);
+					v = ((Trilean)f.get(null)).resolve(autoPresent.get(defAnn.value()));
 				} else if (f.getType() == boolean.class || f.getType() == Boolean.class) {
 					v = (Boolean)f.get(null);
 				} else {

@@ -118,12 +118,14 @@ public class BedcraftFixesConfig {
 	}
 
 	public enum AutoReference {
-		BUKKIT("Will only activate on Bukkit servers if set to AUTO."),
-		TICKTHREADING("Will only activate with TickThreading installed if set to AUTO.");
+		BUKKIT("org/bukkit/Bukkit.class", "Will only activate on Bukkit servers if set to AUTO."),
+		TICKTHREADING("nallar/tickthreading/minecraft/TickThreading.class", "Will only activate with TickThreading installed if set to AUTO.");
 
+		public final String classResource;
 		public final String comment;
 
-		AutoReference(String comment) {
+		AutoReference(String classResource, String comment) {
+			this.classResource = classResource;
 			this.comment = comment;
 		}
 	}
