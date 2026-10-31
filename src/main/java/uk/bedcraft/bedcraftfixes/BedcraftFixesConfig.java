@@ -46,6 +46,12 @@ public class BedcraftFixesConfig {
 	@Default(AutoReference.TICKTHREADING)
 	public static Trilean fixTTRedPowerDeployer = Trilean.AUTO;
 
+	@Key("fix-tt-appeng-stale-viewers")
+	@Comment("Fixes a deadlock between AE subnetworks under TickThreading.\n" +
+			"A controller could update a terminal belonging to another network while holding its own lock.")
+	@Default(AutoReference.TICKTHREADING)
+	public static Trilean fixTTAppEngStaleViewers = Trilean.AUTO;
+
 	@Key("bukkit-event-gravigun")
 	@Comment("Send a bukkit event when a GraviGun interacts with blocks.")
 	@Default(AutoReference.BUKKIT)

@@ -55,6 +55,7 @@ dependencies {
 	mod 'libs:IC2'
 	mod 'libs:ComputerCraft'
 	mod 'libs:RedPowerCore'
+	mod 'libs:AppEng'
 }
 
 mappings {
