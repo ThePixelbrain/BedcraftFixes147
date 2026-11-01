@@ -52,6 +52,13 @@ public class BedcraftFixesConfig {
 	@Default(AutoReference.TICKTHREADING)
 	public static Trilean fixTTAppEngStaleViewers = Trilean.AUTO;
 
+	@Key("fix-tt-appeng-level-emitter")
+	@Comment("Fixes ME Level Emitters getting stuck under TickThreading.\n" +
+			"Redstone read on another thread could see the output briefly switch while the network was being counted,\n" +
+			"and neighbors could miss a state change while another thread was updating redstone.")
+	@Default(AutoReference.TICKTHREADING)
+	public static Trilean fixTTAppEngLevelEmitter = Trilean.AUTO;
+
 	@Key("bukkit-event-gravigun")
 	@Comment("Send a bukkit event when a GraviGun interacts with blocks.")
 	@Default(AutoReference.BUKKIT)
